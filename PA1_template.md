@@ -102,6 +102,39 @@ missval<-sum(is.na(data$steps))
 
 The number of missing values is 2304.  
 
+An inner join and for next with and ifelse are used to convert  
+all the NAs to the value of the mean of the steps for that interval.
+
+
+```r
+datamiss<-inner_join(data, inter)
+```
+
+```
+## Joining by: "interval"
+```
+
+```r
+for(i in 1:length(datamiss$steps)){
+        ifelse(is.na(datamiss$steps[i]), datamiss$steps[i]<-datamiss$stepsmean[i], datamiss$stepsmean[i]<-0)       
+}
+sumamiss<-summarise(group_by(datamiss, date), sum(steps))
+names(sumamiss)<-c("date", "stepsum")
+stepmn<-mean(sumamiss$steps)
+stepmd<-median(sumamiss$steps)
+```
+
+The mean number of steps per day is 1.0766189\times 10^{4}  and the median 1.0766189\times 10^{4}.  
+
+###plot Histogram of total number of step taken each day 
+
+
+```r
+hist(sumamiss$stepsum)
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png) 
+
 
 
 ## Are there differences in activity patterns between weekdays and weekends?

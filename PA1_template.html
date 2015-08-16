@@ -128,10 +128,7 @@ maxinter&lt;-inter[inter$stepsmean==maxi,1]</code></pre>
 <div id="imputing-missing-values" class="section level2">
 <h2>Imputing missing values</h2>
 <pre class="r"><code>data&lt;-read.csv(filec)
-missval&lt;-sum(is.na(data$steps))
-dataf&lt;-data[complete.cases(data),]
-ave&lt;-summarise(group_by(dataf, date), mean(steps))
-names(ave)&lt;-c(&quot;date&quot;, &quot;stepmean&quot;)</code></pre>
+missval&lt;-sum(is.na(data$steps))</code></pre>
 <p>The number of missing values is 2304.</p>
 </div>
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level2">

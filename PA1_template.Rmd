@@ -1,25 +1,87 @@
 ---
-title: "Reproducible Research: Peer Assessment 1"
-output: 
+title: 'Reproducible Research: Peer Assessment 1'
+output:
   html_document:
-    keep_md: true
+    keep_md: yes
+  word_document: default
 ---
+##Setup  
 
+```{r}
+library("dplyr")
+library("markdown")
+filez<-"activity.zip"
+filec<-"activity.csv"
+```
 
-## Loading and preprocessing the data
+## Loading and preprocessing the data 
 
+###Extracting the data file from the zip file  
 
+```{r}
+unzip(filez)
+```
+
+###Reading the data  
+
+```{r}
+data<-read.csv(filec)
+```
+
+###Filter lines with missing values  
+
+```{r}
+data<-data[complete.cases(data),]
+```
 
 ## What is mean total number of steps taken per day?
 
+###Sumarize data per day  
 
+```{r}
+suma<-summarise(group_by(data, date), sum(steps))
+names(suma)<-c("date", "stepsum")
+stepmn<-mean(suma$stepsum)
+stepmd<-median(suma$stepsum)
+```
 
-## What is the average daily activity pattern?
+The mean number of steps per day is `r stepmn`  and the median `r stepmd`.  
 
+###plot Histogram of total number of step taken each day  
+
+```{r}
+hist(suma$stepsum)
+```
+
+## What is the average daily activity pattern?  
+
+```{r}
+inter<-summarise(group_by(data, interval), mean(steps))
+names(inter)<-c("interval", "stepsmean")
+plot(inter$interval,inter$stepsmean, type="l")
+```
+
+###Interval with maximum of steps  
+
+```{r}
+maxi<-max(inter$stepsmean)
+maxinter<-inter[inter$stepsmean==maxi,1]
+
+```
+The maximun average of steps is `r maxi` and takes place during interval `r maxinter`.  
 
 
 ## Imputing missing values
 
+```{r}
+data<-read.csv(filec)
+missval<-sum(is.na(data$steps))
+dataf<-data[complete.cases(data),]
+ave<-summarise(group_by(dataf, date), mean(steps))
+names(ave)<-c("date", "stepmean")
+```
+
+The number of missing values is `r missval`.  
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
